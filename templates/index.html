@@ -1,0 +1,19 @@
+{% extends "layout.html" %}
+
+{% block title %}Index{% endblock %}
+
+{% block main %}
+
+<div class="my-faces" style="background: rgba(250, 39, 118, 0.9)">
+    <h1>My Faces:</h1>
+    <div class="img-container">
+        {% for face, key in faces | dictsort %}
+            <div class="img-box">
+                <img src="../static/data/{{ username }}/faces/{{ face|e }}" alt="Face">
+                <h4>{{ face[:-key] }}</h4>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}

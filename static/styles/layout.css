@@ -1,0 +1,123 @@
+body {
+    margin: 0;
+    padding: 0;
+    font-family: courier;
+    background-image: url(../img/background_.png)
+}
+
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    padding: 0;
+}
+
+nav {
+    position: absolute;
+    background: white;
+    display: block;
+    width: 100%;
+    color: black;
+    text-align: center;
+}
+
+nav ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+    padding-top: 30px;
+}
+
+nav ul li img {
+    height: 50px;
+}
+
+nav ul .logo, nav ul .name {
+    float: left;
+}
+
+nav ul li a, nav ul li a:hover {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+nav ul li h1 {
+    font-size: 50px;
+    font-family: segoe ui;
+}
+
+nav ul li a, nav ul li a:hover {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+nav ul .options {
+    align-self: center;
+}
+
+nav ul .options li {
+    margin: 1vw 3vw 0;
+}
+
+nav ul .logout {
+    float: right;
+    margin: 1vw 3vw 0;
+}
+
+nav ul li ul li {
+    font-size: 30px;
+    font-weight: 600;
+    padding: 7px 7px 7px;
+}
+
+nav ul li ul li:hover {
+    border: 2px solid black;
+    border-radius: 5px;
+    padding: 5px;
+}
+
+.my-faces {
+    position: relative;
+    top: 20vh;
+    left: 10vw;
+    height: 70vh;
+    width: 80vw;
+    color: white;
+}
+
+.my-faces h1 {
+    padding: 30px 40px 30px;
+    margin: 0;
+    font-weight: 600;
+    font-size: 90px;
+}
+
+.my-faces .img-container {
+    display: inline-block;
+    position: relative;
+    left: 2.5%;
+    height: 65%;
+    width: 95%;
+    overflow: auto;
+    margin: 0;
+}
+
+.my-faces .img-container .img-box {
+    height: 90%;
+    width: 33%;
+    float: left;
+    text-align: center;
+}
+
+.my-faces .img-container .img-box img {
+    height: 80%;
+    padding-bottom: 10px;
+}
+
+.my-faces h2 {
+    margin-left: 30px;
+    font-weight: 600;
+}
+
+.my-faces .img-container input {
+    margin-top: 15vh;
+}

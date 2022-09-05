@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Organize Photos{% endblock %}
+
+{% block script %}
+
+
+
+{% endblock %}
+
+{% block main %}
+
+<div class="my-faces" style="background:rgba(250, 39, 118, 0.9)">
+    <h1>Upload Photos:</h1>
+    <h2>Please upload a folder with the photos you wish to organize</h2>
+    <div class="img-container" style="text-align: center; display: block">
+        <form action="/organizephotos" method="post" id="upload"  enctype="multipart/form-data">
+            <label for="img">Select image:</label>
+            <input type="file" name="image" accept=".jpg">
+            <input type="submit">
+          </form>
+    </div>
+</div>
+
+{% endblock %}

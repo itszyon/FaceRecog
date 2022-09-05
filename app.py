@@ -196,7 +196,7 @@ def facerecognition():
         img = image.read()
 
         # Access the direction where we want to save the image
-        dir = "../gallery"
+        dir = "../gallery/full_gallery"
         os.chdir(dir)
 
         # Create a file with the information of the image
@@ -205,20 +205,30 @@ def facerecognition():
         f.close()
 
         unknown_image = face_recognition.load_image_file(filename)
-        unknown_image_encoding = face_recognition.face_encoding(unknown_image)[0]
+        unknown_image_encoding = face_recognition.face_encodings(unknown_image)[0]
 
         results = []
 
         for face in faces:
-            person = face_recognition.load_image_file("../faces/" + face)
-            person_encoding = face_recognition.face_recognition.face_encoding(person)[0]
+            person = face_recognition.load_image_file("../../faces/" + face)
+            person_encoding = face_recognition.face_encodings(person)[0]
 
             result = face_recognition.compare_faces([person_encoding], unknown_image_encoding)
 
             if result:
                 results.append(face.split(".")[0])
 
-        print(results)
+        dir = "../"
+        os.chdir(dir)
+
+        for match in results:
+            dir = "./" + match
+            os.chdir(dir)
+            f = open(filename, "wb")
+            f.write(img)
+            f.close()
+            dir = "../"
+            os.chdir(dir)
 
         # Go back to the initial directory
         os.chdir("../../../../")
@@ -269,7 +279,7 @@ def uploadfaces():
     else:
         return render_template("addfaces.html")
 
-@app.route("/faceidentification")
+@app.route("/viewgallery")
 @login_required
 def faceidentification():
     # TODO

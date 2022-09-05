@@ -1,0 +1,25 @@
+{% extends "layout.html" %}
+
+{% block title %}Add Faces{% endblock %}
+
+{% block script %}
+
+
+
+{% endblock %}
+
+{% block main %}
+
+<div class="my-faces" style="background:rgba(91, 215, 236, 0.9)">
+    <h1>Upload Faces:</h1>
+    <h2>Please upload an image of the face you wish to use</h2>
+    <div class="img-container" style="text-align: center; display: block">
+        <form action="/addfaces" method="post" id="upload" enctype="multipart/form-data">
+            <label for="img">Select image:</label>
+            <input type="file" name="face" accept=".jpg">
+            <input type="submit">
+          </form>
+    </div>
+</div>
+
+{% endblock %}

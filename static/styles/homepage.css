@@ -1,0 +1,162 @@
+body {
+    margin: 0;
+    padding: 0;
+    overflow: hidden;
+    font-family: courier;
+    background-image: url(../img/background_.png)
+}
+
+.container {
+    min-width: 100vw;
+    min-height: 100vh;
+    padding: 0;
+}
+
+.circle1 {
+    position: absolute;
+    height: 0;
+    width: 0;
+    z-index: -1;
+    transition: width 1s, height 1s, transform 1s;
+}
+
+body:hover .circle1 {
+    position: absolute;
+    top: 0;
+    left: 0;
+    background: rgb(250, 39, 118);
+    height: 120vh;
+    width: 65vw;
+    border-radius: 50%;
+    z-index: -1;
+    transform: translate(-30vw, -50vh);
+}
+
+.circle2 {
+    position: absolute;
+    height: 0;
+    width: 0;
+    z-index: -1;
+    transition: width 1s, height 1s, transform 1s;
+}
+
+body:hover .circle2 {
+    position: absolute;
+    background: rgb(250, 39, 118);
+    height: 120vh;
+    width: 65vw;
+    border-radius: 50%;
+    z-index: -1;
+    transform: translate(60vw, 40vh);
+}
+
+ul li {
+    display: inline-block;
+    list-style: none;
+    margin: 0;
+}
+
+.square {
+    position: absolute;
+    background: rgb(91, 215, 236);
+    height: 80vh;
+    width: 80vw;
+    top: 15vh;
+    left: 10vw;
+    color: black;
+    text-align: center;
+}
+
+.square ul .img-container {
+    height: 20vw;
+    width: 20vw;
+    max-height: 40vh;
+    max-width: 40vh;
+    margin: 1vw;
+    border-radius: 50%;
+    border: 5px solid black;
+    overflow: hidden;
+    background-repeat: no-repeat;
+    background-size: 70%;
+    background-position: center;
+}
+
+.square ul #upload {
+    background-image: url(../img/upload.png);
+}
+
+.square ul #face {
+    background-image: url(../img/face_recog.png);
+}
+
+.square ul #download {
+    background-image: url(../img/download.png);
+}
+
+.square h1 {
+    min-height: 5vw;
+    font-size: 70px;
+    font-weight: 600;
+}
+
+.square h3 {
+    min-height: 5vw;
+    font-weight: 600;
+}
+
+.square button img {
+    display: none;
+}
+
+.square button:hover img {
+    display: inline-block;
+}
+
+nav {
+    position: absolute;
+    display: block;
+    width: 95%;
+    color: black;
+    margin-top: 30px;
+}
+
+nav ul li img {
+    height: 50px;
+}
+
+nav ul .logo {
+    float: left;
+}
+
+nav ul li h1 {
+    font-size: 50px;
+    font-family: segoe ui;
+}
+
+nav ul .profile {
+    float: right;
+}
+
+nav ul li a, nav ul li a:hover {
+    text-decoration: inherit;
+    color: inherit;
+}
+
+.color-box {
+    position: absolute;
+    height: 50vh;
+    width: 20vw;
+    top: 25vh;
+    left: 40vw;
+    justify-items: center;
+}
+
+.color-box .info-box {
+    position: absolute;
+    top: 30%;
+    height:60%;
+    width: 100%;
+    margin: 0 auto;
+    justify-items: center;
+    text-align: center;
+}
