@@ -1,10 +1,12 @@
 import os
+import face_recognition
 
 from cs50 import SQL
 from flask import Flask, flash, redirect, render_template, request, session
 from flask_session import Session
 from tempfile import mkdtemp
 from werkzeug.security import check_password_hash, generate_password_hash
+from werkzeug.utils import secure_filename
 from functools import wraps
 
 # Start application
@@ -13,6 +15,7 @@ app = Flask(__name__)
 # Configure session for app
 app.config["SESSION_PERMANENT"] = False
 app.config["SESSION_TYPE"] = "filesystem"
+app.config["UPLOAD_FOLDER"] = "./static"
 Session(app)
 
 # Include database
@@ -51,12 +54,12 @@ def after_request(response):
 def homepage():
     # TODO
 
-    return
+    return render_template("homepage.html")
 
 @app.route("/login", methods=["GET", "POST"])
 def login():
     # TODO
-    
+
     session.clear()
 
     if request.method == "POST":
@@ -70,22 +73,22 @@ def login():
             return apology("Please introduce a username")
         elif not password:
             return apology("Please introduce a password")
-        
+
         row = db.execute("SELECT * FROM users WHERE username = ?", username)
 
         if len(row) != 1:
             return apology("Invalid username")
-        
-        if password != check_password_hash(row[0]["hash"], password):
+
+        if not check_password_hash(row[0]["hash"], password):
             return apology("Wrong password")
-        
+
         session["user_id"] = row[0]["id"]
 
         return redirect("/index")
 
     else:
         return render_template("login.html")
-        
+
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -121,9 +124,18 @@ def register():
         row = db.execute("SELECT id FROM users WHERE username = ?", username)
         session["user_id"] = row[0]["id"]
 
+        dir = "./static/data/" + username
+        os.mkdir(dir)
+
+        faces = dir + "/faces"
+        os.mkdir(faces)
+
+        gallery = dir + "/gallery"
+        os.mkdir(gallery)
+
         # Redirect to homepage
         return redirect("/index")
-    
+
     # If the user accesses through GET show the page
     else:
         return render_template("register.html")
@@ -133,22 +145,129 @@ def register():
 @login_required
 def index():
     # TODO
+    # Get users' id
+    id = session["user_id"]
 
-    return
+    # Get users' username from database
+    row = db.execute("SELECT username FROM users WHERE id=?", id)
+    username = row[0]["username"]
 
-@app.route("/facerecognition")
+    # Create a string with the name of the directory we have to access to obtain the users' faces
+    directory = "./static/data/" + username + "/faces"
+
+    # Access said directory
+    os.chdir(directory)
+
+    # Retrieve the names of all the files in the folder
+    list = os.listdir()
+
+    # Go back to the initial directory
+    os.chdir("../../../../")
+
+    faces = {}
+    for face in list:
+        faces[face] = len(face.split(".")[1]) + 1
+
+    return render_template("index.html", faces=faces, username=username)
+
+@app.route("/organizephotos", methods=["GET", "POST"])
 @login_required
 def facerecognition():
     # TODO
+    if request.method == "POST":
 
-    return
+        # Retrieve the users' username
+        id = session["user_id"]
+        row = db.execute("SELECT username FROM users WHERE id = ?", id)
+        username = row[0]["username"]
 
-@app.route("/uploadfaces")
+        # Store all the faces in a list
+        dir = "./static/data/" + username + "/faces/"
+        os.chdir(dir)
+        faces = os.listdir()
+
+        # Obtain the image the user has uploaded and check if there is an image
+        image = request.files["image"]
+        if not image:
+            return apology("No image uploaded")
+
+        # Get information about the file
+        filename = secure_filename(image.filename)
+        img = image.read()
+
+        # Access the direction where we want to save the image
+        dir = "../gallery"
+        os.chdir(dir)
+
+        # Create a file with the information of the image
+        f = open(filename, "wb")
+        f.write(img)
+        f.close()
+
+        unknown_image = face_recognition.load_image_file(filename)
+        unknown_image_encoding = face_recognition.face_encoding(unknown_image)[0]
+
+        results = []
+
+        for face in faces:
+            person = face_recognition.load_image_file("../faces/" + face)
+            person_encoding = face_recognition.face_recognition.face_encoding(person)[0]
+
+            result = face_recognition.compare_faces([person_encoding], unknown_image_encoding)
+
+            if result:
+                results.append(face.split(".")[0])
+
+        print(results)
+
+        # Go back to the initial directory
+        os.chdir("../../../../")
+
+        return redirect("/index")
+
+    else:
+        return render_template("organizephotos.html")
+
+@app.route("/addfaces", methods=["GET", "POST"])
 @login_required
 def uploadfaces():
     # TODO
+    if request.method == "POST":
 
-    return
+        # Retrieve the users' username
+        id = session["user_id"]
+        row = db.execute("SELECT username FROM users WHERE id = ?", id)
+        username = row[0]["username"]
+
+        # Obtain the image the user has uploaded and check if there is an image
+        face = request.files["face"]
+        if not face:
+            return apology("No image uploaded")
+
+        # Get information about the file
+        filename = secure_filename(face.filename)
+        img = face.read()
+
+        # Access the direction where we want to save the image
+        dir = "./static/data/" + username + "/faces/"
+        os.chdir(dir)
+
+        # Create a file with the information of the image
+        f = open(filename, "wb")
+        f.write(img)
+        f.close()
+
+        # Go back to the initial directory
+        os.chdir("../../../../")
+
+        # Create folder in gallery with the name of the image introduced
+        name = filename.split(".")
+        path = "./static/data/" + username + "/gallery/" + name[0]
+        os.mkdir(path)
+
+        return redirect("/index")
+    else:
+        return render_template("addfaces.html")
 
 @app.route("/faceidentification")
 @login_required

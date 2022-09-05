@@ -1,9 +1,0 @@
-nav {
-    flex: 1;
-    justify-items: right;
-}
-
-nav ul li {
-    display: inline-block;
-    list-style: none;
-}
