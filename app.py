@@ -89,6 +89,10 @@ def login():
     else:
         return render_template("login.html")
 
+@app.route("/logout")
+def logout():
+    session.clear()
+    return redirect("/")
 
 @app.route("/register", methods=["GET", "POST"])
 def register():
@@ -218,7 +222,7 @@ def facerecognition():
             person_encoding = face_recognition.face_encodings(person)[0]
 
             # Compare the new image to the faces
-            result = face_recognition.compare_faces([person_encoding], unknown_image_encoding)
+            result = face_recognition.compare_faces([person_encoding], unknown_image_encoding, tolerance=0.70)
             print(result)
 
             # Add the name of the face to the match list if it is true
