@@ -204,23 +204,31 @@ def facerecognition():
         f.write(img)
         f.close()
 
+        # Encode the image we want to analize
         unknown_image = face_recognition.load_image_file(filename)
         unknown_image_encoding = face_recognition.face_encodings(unknown_image)[0]
 
+        # Initialize a variable to store the matches
         results = []
 
+        # Run through all the faces the user has to check if there is a match
         for face in faces:
+            # Encode the face we are currently checking
             person = face_recognition.load_image_file("../../faces/" + face)
             person_encoding = face_recognition.face_encodings(person)[0]
 
+            # Compare the new image to the faces
             result = face_recognition.compare_faces([person_encoding], unknown_image_encoding)
 
+            # Add the name of the face to the match list if it is true
             if result:
                 results.append(face.split(".")[0])
 
+        # Go to gallery directory
         dir = "../"
         os.chdir(dir)
 
+        # Save the image in every folder with th names of the people in it
         for match in results:
             dir = "./" + match
             os.chdir(dir)
