@@ -219,11 +219,14 @@ def facerecognition():
 
             # Compare the new image to the faces
             result = face_recognition.compare_faces([person_encoding], unknown_image_encoding)
+            print(result)
 
             # Add the name of the face to the match list if it is true
-            if result:
+            if True in result:
+                print(face.split(".")[0])
                 results.append(face.split(".")[0])
-
+        
+        print(results)
         # Go to gallery directory
         dir = "../"
         os.chdir(dir)
