@@ -121,3 +121,18 @@ nav ul li ul li:hover {
 .my-faces .img-container input {
     margin-top: 15vh;
 }
+
+.header {
+    display: inline-block;
+    min-width: 100%;
+    min-height: 15vh;
+}
+
+.gallery-title {
+    float: left;
+    width: 70%;
+}
+
+.header form {
+    padding: 10vh 0;
+}

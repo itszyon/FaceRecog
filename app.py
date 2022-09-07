@@ -287,9 +287,63 @@ def uploadfaces():
     else:
         return render_template("addfaces.html")
 
-@app.route("/viewgallery")
+@app.route("/viewgallery", methods=["GET", "POST"])
 @login_required
-def faceidentification():
+def viewgallery():
     # TODO
+    if request.method == "POST":
+        # Get the users' input
+        face = request.form.get("person")
 
-    return
+        # Get users' id
+        id = session["user_id"]
+
+        # Get users' username from database
+        row = db.execute("SELECT username FROM users WHERE id=?", id)
+        username = row[0]["username"]
+
+        # Enter the users' gallery
+        dir = "./static/data/" + username + "/gallery/"
+        os.chdir(dir)
+
+        # Get the list of all the folders of people in the gallery to choose from
+        people = os.listdir()
+
+        # Create a string with the name of the directory we have to access to obtain the users' faces
+        dir = "./" + face
+
+        # Access said directory
+        os.chdir(dir)
+
+        # Retrieve the names of all the files in the folder
+        list = os.listdir()
+
+        # Go back to the initial directory
+        os.chdir("../../../../../")
+
+        images = {}
+        for image in list:
+            images[image] = len(image.split(".")[1]) + 1
+
+        return render_template("viewgallery.html", people=people, images=images, username=username, face=face)
+    
+    else:
+        # Get users' information
+        id = session["user_id"]
+        row = db.execute("SELECT username FROM users WHERE id = ?", id)
+        username = row[0]["username"]
+        
+        # Enter the users' gallery
+        dir = "./static/data/" + username + "/gallery/"
+        os.chdir(dir)
+
+        # Get the list of all the folders of people in the gallery to choose from
+        people = os.listdir()
+
+        # Go back to original directory
+        dir = "../../../../"
+        os.chdir(dir)
+
+        images = {}
+        
+        return render_template("viewgallery.html", people=people, images=images, username=username)

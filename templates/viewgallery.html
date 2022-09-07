@@ -1,0 +1,35 @@
+{% extends "layout.html" %}
+
+{% block title %}Organize Photos{% endblock %}
+
+{% block script %}
+
+
+
+{% endblock %}
+
+{% block main %}
+
+<div class="my-faces" style="background:rgba(54, 16, 57, 0.9)">
+    <div class="header">
+        <h1 class="gallery-title">View Gallery:</h1>
+        <form action="/viewgallery" method="post">
+            <select name="person">
+                {% for person in people %}
+                <option value="{{ person }}">{{ person }}</option>
+                {% endfor %}
+            </select>
+            <input type="submit">
+        </form>
+    </div>
+    <div class="img-container">
+        {% for image, key in images | dictsort %}
+            <div class="img-box">
+                <img src="../static/data/{{ username }}/gallery/{{ face }}/{{ image|e }}" alt="Image">
+                <h4>{{ image[:-key] }}</h4>
+            </div>
+        {% endfor %}
+    </div>
+</div>
+
+{% endblock %}
