@@ -86,7 +86,14 @@ def login():
 
         # We have to make sure the user has the necesary folders to store the images
 
-        dir = "./static/data"
+        dir = "./static"
+        os.chdir(dir)
+
+        # Check if the data folder exists
+        if "data" not in os.listdir():
+            os.mkdir("data")
+        
+        dir = "./data"
         os.chdir(dir)
 
         # Check if the user has a folder to their name
@@ -119,15 +126,10 @@ def login():
             # Check if the user has the gallery folder
             if "gallery" not in list:
                 os.mkdir("gallery")
-                dir = "./gallery/"
-                os.chdir(dir)
-                os.mkdir("full_gallery")
-                dir = "../"
-                os.chdir(dir)
+                os.mkdir("./gallery/full_gallery")
             
             dir = "../../../"
             os.chdir(dir)
-            print(os.listdir())
 
         return redirect("/index")
 
@@ -151,6 +153,9 @@ def register():
         username = request.form.get("username")
         password = request.form.get("password")
         confirmation = request.form.get("confirmation")
+
+        if username == "":
+            return apology("Please introduce a username")
 
         # Look up all usernames in database
         rows = db.execute("SELECT username FROM users")
@@ -181,6 +186,9 @@ def register():
 
         gallery = dir + "/gallery"
         os.mkdir(gallery)
+
+        full_gallery = dir + "/gallery/full_gallery"
+        os.mkdir(full_gallery)
 
         # Redirect to homepage
         return redirect("/index")
@@ -219,9 +227,9 @@ def index():
 
     return render_template("index.html", faces=faces, username=username)
 
-@app.route("/organizephotos", methods=["GET", "POST"])
+@app.route("/organisephotos", methods=["GET", "POST"])
 @login_required
-def facerecognition():
+def organisephotos():
     # TODO
     if request.method == "POST":
 
@@ -296,7 +304,7 @@ def facerecognition():
         return redirect("/index")
 
     else:
-        return render_template("organizephotos.html")
+        return render_template("organisephotos.html")
 
 @app.route("/addfaces", methods=["GET", "POST"])
 @login_required
