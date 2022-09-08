@@ -84,6 +84,51 @@ def login():
 
         session["user_id"] = row[0]["id"]
 
+        # We have to make sure the user has the necesary folders to store the images
+
+        dir = "./static/data"
+        os.chdir(dir)
+
+        # Check if the user has a folder to their name
+        if username not in os.listdir():
+            os.mkdir(username)
+
+            # Make the directories to store the faces an the gallery
+            dir = "./" + username
+            os.chdir(dir)
+            os.mkdir("faces") 
+            os.mkdir("gallery")
+
+            # Make the full_gallery folder in the gallery
+            dir = "./gallery/"
+            os.chdir(dir)
+            os.mkdir("full_gallery")
+            dir = "../../../../"
+            os.chdir(dir)
+        
+        # If the user has a folder
+        else:
+            dir = "./" + username
+            os.chdir(dir)
+            list = os.listdir()
+
+            # Check if the user has the faces folder
+            if "faces" not in list:
+                os.mkdir("faces")
+
+            # Check if the user has the gallery folder
+            if "gallery" not in list:
+                os.mkdir("gallery")
+                dir = "./gallery/"
+                os.chdir(dir)
+                os.mkdir("full_gallery")
+                dir = "../"
+                os.chdir(dir)
+            
+            dir = "../../../"
+            os.chdir(dir)
+            print(os.listdir())
+
         return redirect("/index")
 
     else:
