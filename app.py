@@ -263,7 +263,14 @@ def organisephotos():
 
         # Encode the image we want to analize
         unknown_image = face_recognition.load_image_file(filename)
-        unknown_image_encoding = face_recognition.face_encodings(unknown_image)[0]
+        unknown_image_encodings = face_recognition.face_encodings(unknown_image)
+
+        if len(unknown_image_encodings) > 0:
+            unknown_image_encoding = unknown_image_encodings[0]
+        else:
+            dir = "../../../../../"
+            os.chdir(dir)
+            return redirect("/index")
 
         # Initialize a variable to store the matches
         results = []
