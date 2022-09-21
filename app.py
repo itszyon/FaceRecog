@@ -178,17 +178,52 @@ def register():
         row = db.execute("SELECT id FROM users WHERE username = ?", username)
         session["user_id"] = row[0]["id"]
 
-        dir = "./static/data/" + username
-        os.mkdir(dir)
+        # We have to make sure the user has the necesary folders to store the images
 
-        faces = dir + "/faces"
-        os.mkdir(faces)
+        dir = "./static"
+        os.chdir(dir)
 
-        gallery = dir + "/gallery"
-        os.mkdir(gallery)
+        # Check if the data folder exists
+        if "data" not in os.listdir():
+            os.mkdir("data")
+        
+        dir = "./data"
+        os.chdir(dir)
 
-        full_gallery = dir + "/gallery/full_gallery"
-        os.mkdir(full_gallery)
+        # Check if the user has a folder to their name
+        if username not in os.listdir():
+            os.mkdir(username)
+
+            # Make the directories to store the faces an the gallery
+            dir = "./" + username
+            os.chdir(dir)
+            os.mkdir("faces") 
+            os.mkdir("gallery")
+
+            # Make the full_gallery folder in the gallery
+            dir = "./gallery/"
+            os.chdir(dir)
+            os.mkdir("full_gallery")
+            dir = "../../../../"
+            os.chdir(dir)
+        
+        # If the user has a folder
+        else:
+            dir = "./" + username
+            os.chdir(dir)
+            list = os.listdir()
+
+            # Check if the user has the faces folder
+            if "faces" not in list:
+                os.mkdir("faces")
+
+            # Check if the user has the gallery folder
+            if "gallery" not in list:
+                os.mkdir("gallery")
+                os.mkdir("./gallery/full_gallery")
+            
+            dir = "../../../"
+            os.chdir(dir)
 
         # Redirect to homepage
         return redirect("/index")
@@ -265,9 +300,7 @@ def organisephotos():
         unknown_image = face_recognition.load_image_file(filename)
         unknown_image_encodings = face_recognition.face_encodings(unknown_image)
 
-        if len(unknown_image_encodings) > 0:
-            unknown_image_encoding = unknown_image_encodings[0]
-        else:
+        if len(unknown_image_encodings) == 0:
             dir = "../../../../../"
             os.chdir(dir)
             return redirect("/index")
@@ -281,16 +314,17 @@ def organisephotos():
             person = face_recognition.load_image_file("../../faces/" + face)
             person_encoding = face_recognition.face_encodings(person)[0]
 
+            print(face)
             # Compare the new image to the faces
-            result = face_recognition.compare_faces([person_encoding], unknown_image_encoding, tolerance=0.70)
-            print(result)
+            for unknown_image_encoding in unknown_image_encodings:
+                result = face_recognition.compare_faces([person_encoding], unknown_image_encoding)
+                print(result)
 
-            # Add the name of the face to the match list if it is true
-            if True in result:
-                print(face.split(".")[0])
-                results.append(face.split(".")[0])
+                # Add the name of the face to the match list if it is true
+                if True in result:
+                    print(face.split(".")[0])
+                    results.append(face.split(".")[0])
         
-        print(results)
         # Go to gallery directory
         dir = "../"
         os.chdir(dir)
@@ -309,7 +343,6 @@ def organisephotos():
         os.chdir("../../../../")
 
         return redirect("/index")
-
     else:
         return render_template("organisephotos.html")
 

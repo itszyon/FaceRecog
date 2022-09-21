@@ -1,6 +1,6 @@
 # FaceFinder
 #### Video Demo: 
-#### Description: (explain what your project is, what each of the files you wrote for the project contains and does, and if you debated certain design choices, explaining why you made them)
+#### Description:
 
 FaceFinder is a web page that organises your photos into diferent folders using facial recognition. It takes in images of faces the user wants to identify in the images and sorts them by name with the help of the python library called face-recognition.
 

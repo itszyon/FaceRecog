@@ -15,6 +15,9 @@
         <h1 class="gallery-title">View Gallery:</h1>
         <form action="/viewgallery" method="post">
             <select name="person">
+                {% if face %}
+                <option selected disabled style="display:none;">{{ face }}</option>
+                {% endif %}
                 {% for person in people %}
                 <option value="{{ person }}">{{ person }}</option>
                 {% endfor %}
